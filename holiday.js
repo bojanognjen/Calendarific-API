@@ -1,7 +1,7 @@
 let top_month = '';
 let top_year = '';
 let api_key = "BkKz6jzx3PjHhf9Cfdt30a32AtQhFIWD";
-let country = "RS";
+let country = "BA";
 
 function markHolidays(data) {
     let squares = document.querySelectorAll('td');
