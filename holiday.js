@@ -1,5 +1,41 @@
-let mjesec = '';
-let godina = '';
+let top_month = '';
+let top_year = '';
+let api_key = "BkKz6jzx3PjHhf9Cfdt30a32AtQhFIWD";
+let country = "RS";
+
+function markHolidays(data) {
+    let squares = document.querySelectorAll('td');
+    for (let square of squares) {
+        for (let information of data) {
+            if (information.date.datetime.day == square.innerText) {
+                square.innerHTML += `<div class="biljeska">${information.name}</div>`;
+            }
+        }
+    }
+}
+
+async function fetchPromise(api_key,year,country,month) {
+    try{
+        const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${api_key}&country=${country}&year=${year}&month=${month}`,
+            {
+                method: "GET",
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                }
+           }
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP status is: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data.response.holidays);
+        markHolidays(data.response.holidays);
+    }
+    catch(error){   
+        console.log(`There was an error: ${error}`);
+    }
+}
 
 let updateMonthAndYear = (currentMonth, currentYear, move) => {
     let totalMonths = currentMonth + move;
@@ -33,11 +69,17 @@ previous.addEventListener('click', ()=> {
 
 
 function main(move) {
+    console.clear();
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth(); 
+
     let result = updateMonthAndYear(month, year, move); // Store result in a variable
+
     makeaTemplate(result.year, result.month); // Pass the result to makeaTemplate
+
+    fetchPromise(api_key, result.year, country, result.month+1);
+
     if (move == 0) {
         for (let day of document.querySelectorAll('td')) {
             if(day.innerText == date.getDate()) {
@@ -87,8 +129,8 @@ function makeaTemplate(year, month) {
     for (let day of days) {
         weeks.push(days.splice(0,7));
     }
-    mjesec = month;
-    godina = year;
+    top_month = month;
+    top_year = year;
     fillTheCalendar(weeks);
 
 }
@@ -103,7 +145,7 @@ function fillTheCalendar(weeks){
             let td = document.createElement('td');
             td.innerHTML = `<div class="broj">${day}</div>`;
             tr.appendChild(td);
-            if (localStorage.getItem(`${day}.${mjesec}.${godina}.`)) {
+            if (localStorage.getItem(`${day}.${top_month}.${top_year}.`)) {
                 td.innerHTML += `<div class="biljeska">${localStorage.getItem(`${day}.${mjesec}.${godina}.`)}</div>`;
             }
         }
