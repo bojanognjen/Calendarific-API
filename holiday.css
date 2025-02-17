@@ -48,7 +48,7 @@ body {
     cursor: pointer;
 }
 
-.biljeska {
+.note {
     font-size: 9px;
     background-color: #48a69f;
     border-radius: 2px;
@@ -57,4 +57,26 @@ body {
     font-weight: 500;
 }
 
+.calendar-input {
+    font-size: 18px;
+    padding: 10px;
+    border: 2px solid #dc0101;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 2rem;
+}
+
+.calendar-input:hover {
+    border-color: #990000;
+}
+
+.calendar-input:focus {
+    border-color: #dc0101;
+    background-color: #f9f9f9;
+}
 

@@ -8,7 +8,7 @@ function markHolidays(data) {
     for (let square of squares) {
         for (let information of data) {
             if (information.date.datetime.day == square.innerText) {
-                square.innerHTML += `<div class="biljeska">${information.name}</div>`;
+                square.innerHTML += `<div class="note">${information.name}</div>`;
             }
         }
     }
@@ -145,9 +145,6 @@ function fillTheCalendar(weeks){
             let td = document.createElement('td');
             td.innerHTML = `<div class="broj">${day}</div>`;
             tr.appendChild(td);
-            if (localStorage.getItem(`${day}.${top_month}.${top_year}.`)) {
-                td.innerHTML += `<div class="biljeska">${localStorage.getItem(`${day}.${mjesec}.${godina}.`)}</div>`;
-            }
         }
         document.querySelector('.calendar_body').appendChild(tr);
     }
