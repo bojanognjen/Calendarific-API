@@ -1,6 +1,6 @@
 let top_month = new Date().getMonth();
 let top_year = new Date().getFullYear();
-let api_key = "pBh2rRkk0e7T7xScxST24Btz22KZPuRs";
+let api_key = "";
 let country = "BA";
 let isCalled = '';
 
