@@ -1,7 +1,8 @@
 let top_month = new Date().getMonth();
 let top_year = new Date().getFullYear();
-let api_key = "BkKz6jzx3PjHhf9Cfdt30a32AtQhFIWD";
+let api_key = "pBh2rRkk0e7T7xScxST24Btz22KZPuRs";
 let country = "BA";
+let isCalled = '';
 
 function markHolidays(data) {
     let squares = document.querySelectorAll('td');
@@ -31,30 +32,9 @@ async function fetchPromise(api_key,year,country,month) {
         }
         const data = await response.json();
         console.log(data.response.holidays);
-        markHolidays(data.response.holidays);
-        return data.response.holidays;
-    }
-    catch(error){   
-        console.log(`There was an error: ${error}`);
-    }
-}
-
-async function checkIfHoliday(api_key,year,country,month) {
-    try{
-        const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${api_key}&country=${country}&year=${year}&month=${month}`,
-            {
-                method: "GET",
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                }
-           }
-        );
-        if (!response.ok) {
-            throw new Error(`HTTP status is: ${response.status}`);
+        if (isCalled) {
+            markHolidays(data.response.holidays);
         }
-        const data = await response.json();
-        console.log(data.response.holidays);
         return data.response.holidays;
     }
     catch(error){   
@@ -104,6 +84,7 @@ function main(move) {
 
     makeaTemplate(result.year, result.month); // Pass the result to makeaTemplate
 
+    isCalled = true;
     fetchPromise(api_key, result.year, country, result.month+1);
 
     if (move == 0) {
@@ -182,8 +163,9 @@ dateInput.addEventListener('input', async function(event) {
     document.querySelector('.description').style.display = 'block';
     const selectedDate = event.target.value;
     let [year, month, date] = selectedDate.split("-");
-
-    let holidays = await checkIfHoliday(api_key, year, country, month);
+    
+    isCalled = false;
+    let holidays = await fetchPromise(api_key, year, country, month);
 
     let isHoliday = holidays.some(holiday => holiday.date.datetime.day == date && 
                                             holiday.date.datetime.month == month && 
