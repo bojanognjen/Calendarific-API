@@ -57,6 +57,9 @@ body {
     font-weight: 500;
 }
 
+.calendar-label {
+    margin-top: 4rem;
+}
 .calendar-input {
     font-size: 18px;
     padding: 10px;
@@ -68,7 +71,7 @@ body {
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin: 2rem;
+    margin: 1rem auto 2rem;
 }
 
 .calendar-input:hover {
@@ -78,5 +81,16 @@ body {
 .calendar-input:focus {
     border-color: #dc0101;
     background-color: #f9f9f9;
+}
+
+.description {
+    border:3px solid #dc0101;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+}
+
+.none {
+    display: none;
 }
 

@@ -1,5 +1,5 @@
-let top_month = '';
-let top_year = '';
+let top_month = new Date().getMonth();
+let top_year = new Date().getFullYear();
 let api_key = "BkKz6jzx3PjHhf9Cfdt30a32AtQhFIWD";
 let country = "BA";
 
@@ -9,7 +9,8 @@ function markHolidays(data) {
         for (let information of data) {
             if (information.date.datetime.day == square.innerText) {
                 square.innerHTML += `<div class="note">${information.name}</div>`;
-            }
+                
+            } 
         }
     }
 }
@@ -31,6 +32,30 @@ async function fetchPromise(api_key,year,country,month) {
         const data = await response.json();
         console.log(data.response.holidays);
         markHolidays(data.response.holidays);
+        return data.response.holidays;
+    }
+    catch(error){   
+        console.log(`There was an error: ${error}`);
+    }
+}
+
+async function checkIfHoliday(api_key,year,country,month) {
+    try{
+        const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${api_key}&country=${country}&year=${year}&month=${month}`,
+            {
+                method: "GET",
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                }
+           }
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP status is: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data.response.holidays);
+        return data.response.holidays;
     }
     catch(error){   
         console.log(`There was an error: ${error}`);
@@ -70,6 +95,7 @@ previous.addEventListener('click', ()=> {
 
 function main(move) {
     console.clear();
+
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth(); 
@@ -149,5 +175,31 @@ function fillTheCalendar(weeks){
         document.querySelector('.calendar_body').appendChild(tr);
     }
 }
+
+const dateInput = document.querySelector('.calendar-input');
+
+dateInput.addEventListener('input', async function(event) {
+    document.querySelector('.description').style.display = 'block';
+    const selectedDate = event.target.value;
+    let [year, month, date] = selectedDate.split("-");
+
+    let holidays = await checkIfHoliday(api_key, year, country, month);
+
+    let isHoliday = holidays.some(holiday => holiday.date.datetime.day == date && 
+                                            holiday.date.datetime.month == month && 
+                                            holiday.date.datetime.year == year);
+
+    document.querySelector(".description").innerText = isHoliday 
+        ? `Yes, this is a holiday! 🎉` 
+        : `No, this is not a holiday.`;
+
+        for (let holiday of holidays) {
+            if (holiday.date.datetime.day == date && 
+                holiday.date.datetime.month == month && 
+                holiday.date.datetime.year == year){
+                    document.querySelector(".description").innerHTML += `<p>It is ${holiday.name}.</p>`
+                }
+        }
+});
 
 window.addEventListener('load', main(0));
