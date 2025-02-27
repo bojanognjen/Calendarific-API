@@ -1,6 +1,6 @@
 let top_month = new Date().getMonth();
 let top_year = new Date().getFullYear();
-let api_key = "";
+let api_key = CONFIG.API_KEY;
 let country = "BA";
 let isCalled = '';
 
@@ -183,5 +183,6 @@ dateInput.addEventListener('input', async function(event) {
                 }
         }
 });
+
 
 window.addEventListener('load', main(0));
